@@ -62,8 +62,12 @@ class Blockchain {
      * that this method is a private method. 
      */
     _addBlock(block) {
-        let self = this;
+        let self = this;        
         return new Promise(async (resolve, reject) => {
+            let validate = await self.validateChain();
+            if(validate != "Chain is Valid") {
+                reject(Error("Chain is not valid!"));
+            }
             block.height = self.height + 1;
             block.time = new Date().getTime().toString().slice(0,-3);
             if(self.chain.length > 0) {
@@ -75,7 +79,7 @@ class Blockchain {
             if (self.chain[self.height] == block) {
                 resolve(block);
             } else {
-                reject(Error("Block was not added."));
+                reject(Error("Block was not added!"));
             }
         }); 
     }
